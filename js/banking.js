@@ -1,54 +1,45 @@
-/* Java Script for banking.html page */
+/*  Function to get input amount of deposit and withdraw */
+function getInputOfDepositOrWithdraw(inputId) {
+    const inputDetails = document.getElementById(inputId);
+    const inputAmount = parseFloat(inputDetails.value);
+    inputDetails.value = '';
+    return inputAmount;
+}
 
+/* Functin to get the previous amount of deposit and withdraw */
+function getPreviousDepositOrWithdraw(inputId) {
+    const currentValue = document.getElementById(inputId);
+    const currentAmount = parseFloat(currentValue.innerText);
+    return currentAmount
+}
+
+/* Function to get previous balance */
+function getPreviousBalance(inputId) {
+    const previousBalance = document.getElementById(inputId);
+    const previousBalanceAmount = parseFloat(previousBalance.innerText);
+    return previousBalanceAmount;
+}
+
+/* --- Handle Deposite --- */
 document.getElementById('deposit-button').addEventListener('click', function () {
-    /* === Update total DEPOSIT amount === */
+    /* Update total DEPOSIT */
+    const currentInputAmount = getInputOfDepositOrWithdraw('deposit-input');
+    const previousDepositAmount = getPreviousDepositOrWithdraw('deposit-total');
+    document.getElementById('deposit-total').innerText = previousDepositAmount + currentInputAmount;
 
-    /* get the deposited amount */
-    const depositInput = document.getElementById('deposit-input');
-    const currentAmount = parseFloat(depositInput.value);
-
-    /* get the total previous amount & convert to number */
-    const totalDeposit = document.getElementById('total-deposit');
-    const previousDepositedAmount = parseFloat(totalDeposit.innerText);
-
-    /* update current total deposit */
-    totalDeposit.innerText = previousDepositedAmount + currentAmount;
-    //clear the deposit input field
-    depositInput.value = '';
-
-    /* === Update total BALANCE === */
-
-    /* get the previous balance */
-    const totalBalance = document.getElementById('balance-total');
-    const totalPreviousBalance = parseFloat(totalBalance.innerText);
-
-    /* Update total balance by current deposit */
-    totalBalance.innerText = totalPreviousBalance + currentAmount;
-
+    /* Update total BALANCE */
+    const previousBalanceAmount = getPreviousBalance('balance-total');
+    document.getElementById('balance-total').innerText = previousBalanceAmount + currentInputAmount;
 });
 
+/* --- Handle Withdraw --- */
 document.getElementById('withdraw-button').addEventListener('click', function () {
-    /* === Update total WITHDRAW amount === */
+    /* Update total WITHDRAW */
+    const currentInputAmount = getInputOfDepositOrWithdraw('withdraw-input');
+    const previousWithdrawAmount = getPreviousDepositOrWithdraw('withdraw-total');
+    document.getElementById('withdraw-total').innerText = previousWithdrawAmount + currentInputAmount;
 
-    /* get the total previous amount & convert to number */
-    const totalWithdraw = document.getElementById('total-withdraw');
-    const previousWithdrawdAmount = parseFloat(totalWithdraw.innerText);
-
-    /* get the withdraw amount */
-    const withdrawInput = document.getElementById('withdraw-input');
-    const currentWithdraAmount = parseFloat(withdrawInput.value);
-
-    /* update current total withdraw */
-    totalWithdraw.innerText = previousWithdrawdAmount + currentWithdraAmount;
-    //clear the deposit input field
-    withdrawInput.value = '';
-
-    /* === Update total BALANCE === */
-
-    /* get the previous balance */
-    const totalBalance = document.getElementById('balance-total');
-    const totalPreviousBalance = parseFloat(totalBalance.innerText);
-
-    /* Update total balance by current deposit */
-    totalBalance.innerText = totalPreviousBalance - currentWithdraAmount;
-})
+    /* Update total BALANCE */
+    const previousBalanceAmount = getPreviousBalance('balance-total');
+    document.getElementById('balance-total').innerText = previousBalanceAmount - currentInputAmount;
+});
