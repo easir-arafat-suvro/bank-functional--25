@@ -6,40 +6,51 @@ function getInputOfDepositOrWithdraw(inputId) {
     return inputAmount;
 }
 
-/* Functin to get the previous amount of deposit and withdraw */
-function getPreviousDepositOrWithdraw(inputId) {
+/* Functin to get the previous amount of deposit and withdraw & update field*/
+function getUpdateDepositOrWithdraw(inputId, currentInputAmount) {
     const previousValue = document.getElementById(inputId);
     const previousAmount = parseFloat(previousValue.innerText);
-    return previousAmount
+    previousValue.innerText = previousAmount + currentInputAmount;
 }
 
-/* Function to get previous balance */
-function getPreviousBalance(inputId) {
-    const previousBalance = document.getElementById(inputId);
+function getCurrentBalance() {
+    const previousBalance = document.getElementById('balance-total');
     const previousBalanceAmount = parseFloat(previousBalance.innerText);
     return previousBalanceAmount;
 }
 
-/* --- Handle Deposite --- */
-document.getElementById('deposit-button').addEventListener('click', function () {
-    /* Update total DEPOSIT */
-    const currentInputAmount = getInputOfDepositOrWithdraw('deposit-input');
-    const previousDepositAmount = getPreviousDepositOrWithdraw('deposit-total');
-    document.getElementById('deposit-total').innerText = previousDepositAmount + currentInputAmount;
 
-    /* Update total BALANCE */
-    const previousBalanceAmount = getPreviousBalance('balance-total');
-    document.getElementById('balance-total').innerText = previousBalanceAmount + currentInputAmount;
+/* Function to get previous balance & update total balance */
+function getUpdateBalance(currentInputAmount, isAdd) {
+    const previousBalance = document.getElementById('balance-total');
+    const previousBalanceAmount = getCurrentBalance();
+    if (isAdd == true) {
+        previousBalance.innerText = previousBalanceAmount + currentInputAmount;
+    }
+    else {
+        previousBalance.innerText = previousBalanceAmount - currentInputAmount;
+    }
+}
+
+/* --- Handle Deposite & Update Balance--- */
+document.getElementById('deposit-button').addEventListener('click', function () {
+    const currentInputAmount = getInputOfDepositOrWithdraw('deposit-input'); /* Update total DEPOSIT */
+    if (currentInputAmount > 0) { // consition to remove negative number & string
+        getUpdateDepositOrWithdraw('deposit-total', currentInputAmount); /* Update total BALANCE */
+        getUpdateBalance(currentInputAmount, true);
+    }
 });
 
-/* --- Handle Withdraw --- */
+/* --- Handle Withdraw & Update Balance  --- */
 document.getElementById('withdraw-button').addEventListener('click', function () {
-    /* Update total WITHDRAW */
     const currentInputAmount = getInputOfDepositOrWithdraw('withdraw-input');
-    const previousWithdrawAmount = getPreviousDepositOrWithdraw('withdraw-total');
-    document.getElementById('withdraw-total').innerText = previousWithdrawAmount + currentInputAmount;
-
-    /* Update total BALANCE */
-    const previousBalanceAmount = getPreviousBalance('balance-total');
-    document.getElementById('balance-total').innerText = previousBalanceAmount - currentInputAmount;
+    const currentBalance = getCurrentBalance();
+    if (currentInputAmount > 0 && currentBalance >= currentInputAmount) { /* condition to remove negative number, string & withdraw greter than balance */
+        getUpdateDepositOrWithdraw('withdraw-total', currentInputAmount);
+        getUpdateBalance(currentInputAmount, false); /* Update total BALANCE */
+    }
+    if (currentBalance < currentInputAmount) {
+        document.getElementById('error-massage').innerText = 'You Have Insufficient Balance in Your Account';
+        document.getElementById('error-massage').style.color = 'OrangeRed';
+    }
 });
