@@ -8,9 +8,9 @@ function getInputOfDepositOrWithdraw(inputId) {
 
 /* Functin to get the previous amount of deposit and withdraw */
 function getPreviousDepositOrWithdraw(inputId) {
-    const currentValue = document.getElementById(inputId);
-    const currentAmount = parseFloat(currentValue.innerText);
-    return currentAmount
+    const previousValue = document.getElementById(inputId);
+    const previousAmount = parseFloat(previousValue.innerText);
+    return previousAmount
 }
 
 /* Function to get previous balance */
